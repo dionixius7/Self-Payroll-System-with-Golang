@@ -22,5 +22,8 @@ func main() {
 
 	company.Get("/:id", companyController.GetCompanyInfo)
 
+	company.Post("/", companyController.CreateCompany)
+	company.Patch("/:id", companyController.UpdateCompany)
+	company.Patch("/topup/:id", companyController.TopupBalanceCompany)
 	app.Listen(":8000")
 }

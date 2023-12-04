@@ -3,6 +3,7 @@ package controllers
 import (
 	//"finalproject_basisdata/models"
 	//"finalproject_basisdata/repository"
+	"finalproject_basisdata/models"
 	"finalproject_basisdata/usecase"
 	"log"
 	"strconv"
@@ -39,60 +40,86 @@ func (c *CompanyController) GetCompanyInfo(ctx *fiber.Ctx) error {
 	})
 }
 
-// func GetDetailCompany(c *fiber.Ctx) error {
-// 	var company []models.Company
+func (c *CompanyController) CreateCompany(ctx *fiber.Ctx) error {
+	var req models.CompanyRequest
 
-//		repository.DB.Find(&company)
-//		return c.JSON(company)
-//	}
-// func CreateCompany(c *fiber.Ctx) error {
-// 	var req models.CompanyRequest
-// 	var company models.Company
+	if err := ctx.BodyParser(&req); err != nil {
+		log.Println("Invalid req body: ", err)
+		return ctx.Status(fiber.StatusBadRequest).JSON(fiber.Map{
+			"message": "Invalid request body",
+		})
+	}
+	if req.Name == "" {
+		log.Println("Nama perusahaan belum diisi")
+		return ctx.Status(fiber.StatusBadRequest).JSON(fiber.Map{
+			"message": "Nama Perusahaan Belum Diisi",
+		})
+	}
+	company, err := c.Usecase.CreateCompany(&req)
+	if err != nil {
+		log.Println("Failed to create company: ", err)
+		return ctx.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
+			"message": "Gagal membuat data perusahaan",
+		})
+	}
+	return ctx.JSON(fiber.Map{
+		"message": fiber.StatusOK,
+		"data":    company,
+	})
+}
 
-// 	if err := c.BodyParser(&company); err != nil {
-// 		return err
-// 	}
-// 	if err := repository.DB.Create(&company).Error; err != nil {
-// 		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
-// 			"message": err.Error(),
-// 		})
-// 	}
-// 	return c.JSON(req)
-// }
+func (c *CompanyController) UpdateCompany(ctx *fiber.Ctx) error {
+	var req models.CompanyRequest
+	if err := ctx.BodyParser(&req); err != nil {
+		log.Println("Invalid req body: ", err)
+		return ctx.Status(fiber.StatusBadRequest).JSON(fiber.Map{
+			"message": "Invalid request body",
+		})
+	}
+	id, err := strconv.Atoi(ctx.Params("id"))
+	if err != nil {
+		log.Println("ID perusahaan tidak dapat ditemukan: ", err)
+		return ctx.Status(fiber.StatusNotFound).JSON(fiber.Map{
+			"message": "Perusahaan Tidak Ditemukan",
+		})
+	}
+	company, err := c.Usecase.UpdateCompany(id, &req)
+	if err != nil {
+		log.Println("Failed to update company: ", err)
+		return ctx.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
+			"message": "Gagal mengubah data perusahaan",
+		})
+	}
+	return ctx.JSON(fiber.Map{
+		"message": "Berhasil mengubah data perusahaan",
+		"data":    company,
+	})
+}
 
-// func UpdateCompany(c *fiber.Ctx) error {
-// 	var req models.CompanyRequest
-// 	var company models.Company
-// 	id := c.Params("id")
-// 	if err := c.BodyParser(&req); err != nil {
-// 		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
-// 			"message": err.Error(),
-// 		})
-// 	}
-// 	err := repository.DB.Model(models.Company{}).Where("id", id).Debug().Updates(&company).Error
-// 	if err != nil {
-// 		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
-// 			"message": "Tidak dapat memperbarui data: " + err.Error(),
-// 		})
-// 	}
-// 	return c.JSON(fiber.StatusOK)
-// }
-
-// func TopupBalanceCompany(c *fiber.Ctx) error {
-// 	var req models.TopupCompanyBalance
-// 	var company models.Company
-// 	id := c.Params("id")
-// 	if err := c.BodyParser(&req); err != nil {
-// 		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
-// 			"message": err.Error(),
-// 		})
-// 	}
-
-// 	err := repository.DB.Model(models.Company{}).Where("id", id).Debug().Update(&company).Error
-// 	if err != nil {
-// 		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
-// 			"message": "Tidak dapat memperbarui data: " + err.Error(),
-// 		})
-// 	}
-// 	return c.JSON(fiber.StatusOK)
-// }
+func (c *CompanyController) TopupBalanceCompany(ctx *fiber.Ctx) error {
+	var req models.TopupCompanyBalance
+	if err := ctx.BodyParser(&req); err != nil {
+		log.Println("Invalid req body: ", err)
+		return ctx.Status(fiber.StatusBadRequest).JSON(fiber.Map{
+			"message": "Invalid request body",
+		})
+	}
+	id, err := strconv.Atoi(ctx.Params("id"))
+	if err != nil {
+		log.Println("ID perusahaan tidak dapat ditemukan: ", err)
+		return ctx.Status(fiber.StatusNotFound).JSON(fiber.Map{
+			"message": "Perusahaan Tidak Ditemukan",
+		})
+	}
+	company, err := c.Usecase.TopupBalanceCompany(id, &req)
+	if err != nil {
+		log.Println("Gagal menambahkan saldo perusahaan: ", err)
+		return ctx.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
+			"message": "Gagal menambahkan saldo perusahaan",
+		})
+	}
+	return ctx.JSON(fiber.Map{
+		"message": "Berhasil menambahkan saldo perusahaan",
+		"data":    company,
+	})
+}
