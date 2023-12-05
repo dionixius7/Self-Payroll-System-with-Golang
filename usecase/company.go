@@ -41,16 +41,26 @@ func (c *CompanyUsecase) CreateCompany(req *models.CompanyRequest) (*models.Comp
 }
 
 func (c *CompanyUsecase) UpdateCompany(id int, req *models.CompanyRequest) (*models.Company, error) {
-	if req.Name == "" || req.Balance == 0 {
-		return nil, errors.New("Silakan isi seluruh field")
+	// if req.Name == "" || req.Balance == 0 {
+	// 	return nil, errors.New("Silakan isi seluruh field")
+	// }
+	// company := &models.Company{
+	// 	// ID:      id,
+	// 	Name:    req.Name,
+	// 	Balance: &req.Balance,
+	// }
+	company, err := c.Repo.GetCompanyInfo(id)
+	if err != nil {
+		return nil, err
 	}
-	company := &models.Company{
-		ID:      id,
-		Name:    req.Name,
-		Balance: &req.Balance,
+	if req.Name != "" {
+		company.Name = req.Name
+	}
+	if req.Balance != 0 {
+		company.Balance = &req.Balance
 	}
 	if err := c.Repo.UpdateCompany(company); err != nil {
-		log.Println("Terjadi kesalahan saat mengubah data perusahaan: ", err)
+		// log.Println("Terjadi kesalahan saat mengubah data perusahaan: ", err)
 		return nil, err
 	}
 	return company, nil
@@ -59,28 +69,14 @@ func (c *CompanyUsecase) UpdateCompany(id int, req *models.CompanyRequest) (*mod
 func (c *CompanyUsecase) TopupBalanceCompany(id int, req *models.TopupCompanyBalance) (*models.Company, error) {
 	company, err := c.Repo.GetCompanyInfo(id)
 	if err != nil {
-		log.Println("Tidak dapat menemukan data perusahaan: ", err)
+		// log.Println("Tidak dapat menemukan data perusahaan: ", err)
 		return nil, err
 	}
 
 	updatedCompany, err := c.Repo.UpdateCompanyBalance(company, req.Balance)
 	if err != nil {
-		log.Println("Tidak dapat menemukan data perusahaan: ", err)
 		return nil, err
 	}
 
 	return updatedCompany, nil
 }
-
-// company, err := c.Repo.GetCompanyInfo(id)
-// if err != nil {
-// 	log.Println("Tidak dapat menemukan data perusahaan: ", err)
-// 	return nil, err
-// }
-// y
-// company.Balance := company.Balance + req.Balance
-// if err := c.Repo.UpdateCompanyBalance(company); err != nil {
-// 	log.Println("Terjadi kesalahan saat menambahkan saldo ke perusahaan: ", err)
-// 	return nil, err
-// }
-// return company, nil

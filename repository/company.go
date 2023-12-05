@@ -1,6 +1,7 @@
 package repository
 
 import (
+	//"errors"
 	"errors"
 	"finalproject_basisdata/models"
 
@@ -31,10 +32,8 @@ func (c *CompanyRepository) CreateCompany(company *models.Company) error {
 }
 
 func (c *CompanyRepository) UpdateCompany(company *models.Company) error {
-	if err := c.DB.Model(&models.Company{}).Where("id = ?", company.ID).Updates(map[string]interface{}{
-		"Name":    company.Name,
-		"Balance": company.Balance,
-	}).Error; err != nil {
+	err := c.DB.Model(company).Debug().Updates(company).Error
+	if err != nil {
 		return err
 	}
 	return nil
@@ -42,44 +41,33 @@ func (c *CompanyRepository) UpdateCompany(company *models.Company) error {
 
 func (c *CompanyRepository) UpdateCompanyBalance(company *models.Company, balance int) (*models.Company, error) {
 	if company.Balance == nil {
-		return nil, errors.New("Saldo perusahaan kosong")
+		return nil, errors.New("Balance is nil")
 	}
-	updatedBalance := *company.Balance + balance
 
-	if err := c.DB.Model(company).Updates(map[string]interface{}{
-		"Balance": updatedBalance,
-		// "Note":    "Topup saldo perusahaan",
-	}).Error; err != nil {
+	updatedBalance := balance + *company.Balance
+
+	if err := c.DB.Model(company).Update("Balance", updatedBalance).Error; err != nil {
 		return nil, err
 	}
 
-	updatedCompany, err := c.GetCompanyInfo(company.ID)
-	if err != nil {
-		return nil, err
-	}
+	// You might want to update the company object with the new balance
+	company.Balance = &updatedBalance
 
-	return updatedCompany, nil
+	return company, nil
 }
 
-// func (c *CompanyRepository) UpdateCompanyBalance(company *models.Company) error {
-// 	company, err := c.DB.Get(id)
-// 	y := company.Balance
-// 	if err := c.DB.Model(&models.Company{}).Where("id = ?", company.ID).Error; err != nil {
-// 		return nil,err
+// func (c *CompanyRepository) UpdateCompanyBalance(company *models.Company, balance int) (*models.Company, error) {
+// 	if company.Balance == nil {
+// 		return nil, errors.New("Balance 0")
 // 	}
-// 	if err := c.DB.Model(&models.Company{}).Where("id = ?", company.ID).Updates("Balance", y + balance).Error; err != nil {
+// 	if err := c.DB.Model(company).Updates(company).Find(company).Error; err != nil {
 // 		return nil, err
 // 	}
-// 	if err := c.DB.Model(&models.Company{}).Where("id = ?", company.ID).Updates(map[string]interface{}{
-// 		Amount: balance,
-// 		Note: "Topup saldo perusahaan",
-// 	}).Error; err != nil {
-// 		return nil, err
-// 	}
-// 	return company, err
 
+// 	// updatedBalance := amount + *company.Balance
+// 	y := *company.Balance
+// 	if err := c.DB.Model(company).Update("Balance", balance+y).Error; err != nil {
+// 		return nil, err
+// 	}
+// 	return company, nil
 // }
-// if err := c.DB.Save(company).Error; err != nil {
-// 	return err
-// }
-// return nil
