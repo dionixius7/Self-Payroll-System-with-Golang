@@ -19,11 +19,20 @@ func main() {
 	companyRepo := repository.NewCompanyRepository(repository.DB)
 	companyUsecase := usecase.NewCompanyUsecase(companyRepo)
 	companyController := controllers.NewCompanyController(companyUsecase)
-
 	company.Get("/:id", companyController.GetCompanyInfo)
-
 	company.Post("/", companyController.CreateCompany)
 	company.Patch("/:id", companyController.UpdateCompany)
 	company.Patch("/topup/:id", companyController.TopupBalanceCompany)
+
+	employeeRepo := repository.NewEmployeeRepository(repository.DB)
+	employeeUsecase := usecase.NewEmployeeUsecase(employeeRepo)
+	employeeController := controllers.NewEmployeeController(employeeUsecase)
+	employee := api.Group("/employee")
+	employee.Post("/", employeeController.CreateEmployeeData)
+	employee.Get("/", employeeController.GetAllEmployee)
+	employee.Get("/:id", employeeController.GetEmployeeById)
+	employee.Patch("/:id", employeeController.UpdateEmployeeData)
+	employee.Delete("/:id", employeeController.DeleteEmployee)
+
 	app.Listen(":8000")
 }

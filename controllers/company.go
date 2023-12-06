@@ -6,7 +6,8 @@ import (
 	"finalproject_basisdata/models"
 	"finalproject_basisdata/usecase"
 	"log"
-	"strconv"
+
+	//"strconv"
 
 	"github.com/gofiber/fiber/v2"
 )
@@ -20,14 +21,14 @@ func NewCompanyController(usecase *usecase.CompanyUsecase) *CompanyController {
 }
 
 func (c *CompanyController) GetCompanyInfo(ctx *fiber.Ctx) error {
-	id, err := strconv.Atoi(ctx.Params("id"))
+	id := ctx.Params("id")
+	company, err := c.Usecase.GetCompanyInfo(id)
 	if err != nil {
 		log.Println("Invalid ID:", err)
 		return ctx.Status(fiber.StatusBadRequest).JSON(fiber.Map{
 			"message": "Error: Data tidak ditemukan atau Anda salah memasukkan ID",
 		})
 	}
-	name, err := c.Usecase.GetCompanyInfo(id)
 	if err != nil {
 		log.Println("Terjadi kesalahan dalam sistem:", err)
 		return ctx.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
@@ -35,8 +36,8 @@ func (c *CompanyController) GetCompanyInfo(ctx *fiber.Ctx) error {
 		})
 	}
 	return ctx.JSON(fiber.Map{
-		"id":   id,
-		"name": name,
+		"id":      id,
+		"company": company,
 	})
 }
 
@@ -76,20 +77,21 @@ func (c *CompanyController) UpdateCompany(ctx *fiber.Ctx) error {
 			"message": "Invalid request body",
 		})
 	}
-	id, err := strconv.Atoi(ctx.Params("id"))
+	id := ctx.Params("id")
+	company, err := c.Usecase.UpdateCompany(id, &req)
 	if err != nil {
 		log.Println("ID perusahaan tidak dapat ditemukan: ", err)
 		return ctx.Status(fiber.StatusNotFound).JSON(fiber.Map{
 			"message": "Perusahaan Tidak Ditemukan",
 		})
 	}
-	company, err := c.Usecase.UpdateCompany(id, &req)
-	if err != nil {
-		log.Println("Failed to update company: ", err)
-		return ctx.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
-			"message": "Gagal mengubah data perusahaan",
-		})
-	}
+	//company, err := c.Usecase.UpdateCompany(id, &req)
+	// if err != nil {
+	// 	log.Println("Failed to update company: ", err)
+	// 	return ctx.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
+	// 		"message": "Gagal mengubah data perusahaan",
+	// 	})
+	// }
 	return ctx.JSON(fiber.Map{
 		"message": "Berhasil mengubah data perusahaan",
 		"data":    company,
@@ -104,14 +106,15 @@ func (c *CompanyController) TopupBalanceCompany(ctx *fiber.Ctx) error {
 			"message": "Invalid request body",
 		})
 	}
-	id, err := strconv.Atoi(ctx.Params("id"))
+	id := ctx.Params("id")
+	balance, err := c.Usecase.TopupBalanceCompany(id, &req)
 	if err != nil {
 		log.Println("ID perusahaan tidak dapat ditemukan: ", err)
 		return ctx.Status(fiber.StatusNotFound).JSON(fiber.Map{
 			"message": "Perusahaan Tidak Ditemukan",
 		})
 	}
-	company, err := c.Usecase.TopupBalanceCompany(id, &req)
+	//company, err := c.Usecase.TopupBalanceCompany(id, &req)
 	if err != nil {
 		log.Println("Gagal menambahkan saldo perusahaan: ", err)
 		return ctx.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
@@ -120,6 +123,6 @@ func (c *CompanyController) TopupBalanceCompany(ctx *fiber.Ctx) error {
 	}
 	return ctx.JSON(fiber.Map{
 		"message": "Berhasil menambahkan saldo perusahaan",
-		"data":    company,
+		"data":    balance,
 	})
 }
