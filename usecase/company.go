@@ -41,14 +41,6 @@ func (c *CompanyUsecase) CreateCompany(req *models.CompanyRequest) (*models.Comp
 }
 
 func (c *CompanyUsecase) UpdateCompany(id string, req *models.CompanyRequest) (*models.Company, error) {
-	// if req.Name == "" || req.Balance == 0 {
-	// 	return nil, errors.New("Silakan isi seluruh field")
-	// }
-	// company := &models.Company{
-	// 	// ID:      id,
-	// 	Name:    req.Name,
-	// 	Balance: &req.Balance,
-	// }
 	company, err := c.Repo.GetCompanyInfo(id)
 	if err != nil {
 		return nil, err
@@ -60,23 +52,24 @@ func (c *CompanyUsecase) UpdateCompany(id string, req *models.CompanyRequest) (*
 		company.Balance = &req.Balance
 	}
 	if err := c.Repo.UpdateCompany(company); err != nil {
-		// log.Println("Terjadi kesalahan saat mengubah data perusahaan: ", err)
 		return nil, err
 	}
 	return company, nil
 }
 
-func (c *CompanyUsecase) TopupBalanceCompany(id string, req *models.TopupCompanyBalance) (*models.Company, error) {
+func (c *CompanyUsecase) TopupBalanceCompany(id string, req models.TopupCompanyBalance) (*models.Company, error) {
 	company, err := c.Repo.GetCompanyInfo(id)
 	if err != nil {
-		// log.Println("Tidak dapat menemukan data perusahaan: ", err)
 		return nil, err
 	}
 
-	updatedCompany, err := c.Repo.UpdateCompanyBalance(company, req.Balance)
+	err2 := c.Repo.UpdateCompanyBalance(*company, req.Balance)
+	if err2 != nil {
+		return nil, err2
+	}
+	companynew, err := c.Repo.GetCompanyInfo(id)
 	if err != nil {
 		return nil, err
 	}
-
-	return updatedCompany, nil
+	return companynew, nil
 }

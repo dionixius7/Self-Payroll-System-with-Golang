@@ -2,8 +2,9 @@ package repository
 
 import (
 	//"errors"
-	"errors"
+	//"errors"
 	"finalproject_basisdata/models"
+	//"fmt"
 
 	"gorm.io/gorm"
 )
@@ -39,20 +40,21 @@ func (c *CompanyRepository) UpdateCompany(company *models.Company) error {
 	return nil
 }
 
-func (c *CompanyRepository) UpdateCompanyBalance(company *models.Company, balance int) (*models.Company, error) {
-	if company.Balance == nil {
-		return nil, errors.New("Balance: 0")
-	}
-	if err := c.DB.Model(company).Updates(company).Find(company).Error; err != nil {
-		return nil, err
-	}
+func (c *CompanyRepository) UpdateCompanyBalance(company models.Company, balance int) error {
+	// if *company.Balance == 0 {
+	// 	return nil, errors.New("Balance: 0")
+	// }
+	// if err := c.DB.Model(company).Updates(company).Find(company).Error; err != nil {
+	// 	return nil, err
+	// }
 
 	// updatedBalance := amount + *company.Balance
 
-	//TODO: koreksi flow ini gabisa bisa cok
-	y := *company.Balance
-	if err := c.DB.Model(company).Update("Balance", balance+y).Error; err != nil {
-		return nil, err
+	//TODO: koreksi flow ini gabisa bisa
+	//y := *company.Balance
+	y := *company.Balance + balance
+	if err := c.DB.Model(company).Update("balance", y).Error; err != nil {
+		return err
 	}
-	return company, nil
+	return nil
 }

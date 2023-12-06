@@ -1,13 +1,9 @@
 package controllers
 
 import (
-	//"finalproject_basisdata/models"
-	//"finalproject_basisdata/repository"
 	"finalproject_basisdata/models"
 	"finalproject_basisdata/usecase"
 	"log"
-
-	//"strconv"
 
 	"github.com/gofiber/fiber/v2"
 )
@@ -85,13 +81,6 @@ func (c *CompanyController) UpdateCompany(ctx *fiber.Ctx) error {
 			"message": "Perusahaan Tidak Ditemukan",
 		})
 	}
-	//company, err := c.Usecase.UpdateCompany(id, &req)
-	// if err != nil {
-	// 	log.Println("Failed to update company: ", err)
-	// 	return ctx.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
-	// 		"message": "Gagal mengubah data perusahaan",
-	// 	})
-	// }
 	return ctx.JSON(fiber.Map{
 		"message": "Berhasil mengubah data perusahaan",
 		"data":    company,
@@ -106,19 +95,17 @@ func (c *CompanyController) TopupBalanceCompany(ctx *fiber.Ctx) error {
 			"message": "Invalid request body",
 		})
 	}
+	if req.Balance == 0 {
+		return ctx.Status(fiber.StatusBadRequest).JSON(fiber.Map{
+			"message": "Saldo harus lebih besar dari nol",
+		})
+	}
 	id := ctx.Params("id")
-	balance, err := c.Usecase.TopupBalanceCompany(id, &req)
+	balance, err := c.Usecase.TopupBalanceCompany(id, req)
 	if err != nil {
 		log.Println("ID perusahaan tidak dapat ditemukan: ", err)
 		return ctx.Status(fiber.StatusNotFound).JSON(fiber.Map{
 			"message": "Perusahaan Tidak Ditemukan",
-		})
-	}
-	//company, err := c.Usecase.TopupBalanceCompany(id, &req)
-	if err != nil {
-		log.Println("Gagal menambahkan saldo perusahaan: ", err)
-		return ctx.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
-			"message": "Gagal menambahkan saldo perusahaan",
 		})
 	}
 	return ctx.JSON(fiber.Map{

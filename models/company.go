@@ -19,5 +19,5 @@ type CompanyRequest struct {
 }
 
 type TopupCompanyBalance struct {
-	Balance int `json:"balance;" validate:"required"`
+	Balance int `json:"balance" validate:"required"`
 }
