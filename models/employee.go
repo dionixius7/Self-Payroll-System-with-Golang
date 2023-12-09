@@ -15,6 +15,7 @@ type Employee struct {
 	Address     *string    `json:"address"`
 	Private_Pin *string    `json:"private_pin"`
 	Position_ID *string    `json:"position_id"`
+	Position    *Position  `json:"position"`
 	CreatedAt   time.Time  `gorm:"default:now()" json:"created_at"`
 	UpdatedAt   *time.Time `json:"updated_at"`
 }

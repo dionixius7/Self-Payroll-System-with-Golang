@@ -9,3 +9,8 @@ type Position struct {
 	CreatedAt    time.Time  `gorm:"default:now()" json:"created_at"`
 	UpdatedAt    *time.Time `json:"updated_at"`
 }
+
+type PositionReq struct {
+	NamePosition *string `json:"name_position" validate:"required"`
+	Salary       *int    `json:"salary" validate:"required"`
+}

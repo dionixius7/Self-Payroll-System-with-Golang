@@ -13,7 +13,7 @@ func SetupEmployeeRoutes(api fiber.Router) {
 	employeeUsecase := usecase.NewEmployeeUsecase(employeeRepo)
 	employeeController := controllers.NewEmployeeController(employeeUsecase)
 
-	employee := api.Group("/employee")
+	employee := api.Group("/company/employee")
 	employee.Post("/", employeeController.CreateEmployeeData)
 	employee.Get("/", employeeController.GetAllEmployee)
 	employee.Get("/:id", employeeController.GetEmployeeById)
