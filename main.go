@@ -16,8 +16,8 @@ func main() {
 
 	routes.SetupCompanyRoutes(api)
 	routes.SetupEmployeeRoutes(api)
-	//routes.SetupAdminRoutes(api)
+	routes.SetupAdminRoutes(api)
 	routes.SetupPositionRoutes(api)
-	//routes.SetupTransactionRoutes(api)
+	routes.SetupTransactionRoutes(api)
 	app.Listen(":8000")
 }

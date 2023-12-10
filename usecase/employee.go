@@ -65,3 +65,21 @@ func (c *EmployeeUsecase) DeleteEmployee(id string) error {
 	}
 	return nil
 }
+
+func (c *EmployeeUsecase) WithdrawSalaryEmployee(id string, req *models.WithdrawRequest) error {
+	return c.Repo.WithdrawSalaryEmployee(id, req)
+}
+
+// func (c *EmployeeUsecase) WithdrawSalaryEmployee(id string, req *models.WithdrawRequest) error {
+// 	employee, err := c.Repo.WithdrawSalaryEmployee(&req)
+// 	if err != nil {
+// 		return nil, err
+// 	}
+// 	if employee.Private_Pin != req.Private_Pin {
+// 		return errors.New("Pin yang anda masukkan salah")
+// 	}
+// 	position, err := c.Repo.WithdrawSalaryEmployee(&req)
+// 	if err != nil {
+// 		return nil, err
+// 	}
+// }

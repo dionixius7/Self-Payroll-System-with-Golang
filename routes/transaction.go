@@ -12,8 +12,8 @@ func SetupTransactionRoutes(api fiber.Router) {
 	transactionRepo := repository.NewTransactionRepository(repository.DB)
 	transactionUsecase := usecase.NewTransactionUsecase(transactionRepo)
 	transactionController := controllers.NewTransactionController(transactionUsecase)
-
-	transaction := api.Group("/company/transaction")
-
+	
+	//http://localhost:8000/api/admin/company/transaction/
+	transaction := api.Group("/admin/company/transaction")
 	transaction.Get("/", transactionController.GetInfoTransaction)
 }

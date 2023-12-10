@@ -10,3 +10,19 @@ type Transaction struct {
 	CreatedAt time.Time  `gorm:"default:now()" json:"created_at"`
 	UpdatedAt *time.Time `json:"updated_at"`
 }
+
+type TransactionRequest struct {
+	Type   string `json:"type"`
+	Amount int    `json:"amount"`
+	Note   string `json:"note"`
+}
+
+const (
+	WithdrawTransactionType = "Kredit"
+	TopupTransactionType    = "Debit"
+)
+
+const (
+	WithdrawTransactionNote = "Pencairan gaji bulanan karyawan"
+	TopupTransactionNote    = "Topup saldo perusahaan"
+)

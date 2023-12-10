@@ -13,7 +13,8 @@ func SetupPositionRoutes(api fiber.Router) {
 	positionUsecase := usecase.NewPositionUsecase(positionRepo)
 	positionController := controllers.NewPositionController(positionUsecase)
 
-	position := api.Group("/company/position")
+	//http://localhost:8000/api/admin/company/position/
+	position := api.Group("/admin/company/position")
 	position.Post("/", positionController.CreatePosition)
 	position.Get("/:id", positionController.GetPositionById)
 	position.Delete("/:id", positionController.DeletePosition)

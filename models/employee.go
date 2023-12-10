@@ -28,3 +28,8 @@ type EmployeeRequest struct {
 	Private_Pin string `json:"private_pin"`
 	Position_ID string `json:"position_id"`
 }
+
+type WithdrawRequest struct {
+	ID          int    `json:"id"`
+	Private_Pin string `json:"private_pin"`
+}

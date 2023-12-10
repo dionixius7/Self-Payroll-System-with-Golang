@@ -107,3 +107,27 @@ func (c *EmployeeController) DeleteEmployee(ctx *fiber.Ctx) error {
 		"message": "Sukses menghapus data karyawan",
 	})
 }
+
+func (c *EmployeeController) WithdrawSalaryEmployee(ctx *fiber.Ctx) error {
+	var req models.WithdrawRequest
+	if err := ctx.BodyParser(&req); err != nil {
+		log.Println("Invalid req body: ", err)
+		return ctx.Status(fiber.StatusBadRequest).JSON(fiber.Map{
+			"message": "Invalid request body",
+		})
+	}
+
+	id := ctx.Params("id")
+	err := c.Usecase.WithdrawSalaryEmployee(id, &req)
+	if err != nil {
+		log.Println("Err: ", err)
+		return ctx.Status(fiber.StatusBadRequest).JSON(fiber.Map{
+			"message": err.Error(),
+		})
+	}
+
+	return ctx.JSON(fiber.Map{
+		"message": fiber.StatusOK,
+		"data":    "Berhasil mencairkan gaji bulanan Anda",
+	})
+}
