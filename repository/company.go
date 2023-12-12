@@ -1,10 +1,7 @@
 package repository
 
 import (
-	//"errors"
-	//"errors"
 	"finalproject_basisdata/models"
-	//"fmt"
 
 	"gorm.io/gorm"
 )
@@ -40,21 +37,53 @@ func (c *CompanyRepository) UpdateCompany(company *models.Company) error {
 	return nil
 }
 
-func (c *CompanyRepository) UpdateCompanyBalance(company models.Company, balance int) error {
-	// if *company.Balance == 0 {
-	// 	return nil, errors.New("Balance: 0")
-	// }
-	// if err := c.DB.Model(company).Updates(company).Find(company).Error; err != nil {
-	// 	return nil, err
-	// }
+func (c *CompanyRepository) UpdateCompanyTopupBalance(company models.Company, balance int) error {
 
-	// updatedBalance := amount + *company.Balance
-
-	//TODO: koreksi flow ini gabisa bisa
-	//y := *company.Balance
-	y := *company.Balance + balance
-	if err := c.DB.Model(company).Update("balance", y).Error; err != nil {
+	newBalance := *company.Balance + balance
+	if err := c.DB.Model(&company).Update("balance", newBalance).Error; err != nil {
 		return err
 	}
+
+	transaction := models.Transaction{
+		Amount: &balance,
+		Note:   "topup saldo perusahaan",
+		Type:   "debit",
+	}
+
+	if err := c.DB.Create(&transaction).Error; err != nil {
+		return err
+	}
+
 	return nil
 }
+
+func (c *CompanyRepository) UpdateCompanyBalanceAfterWithdraw(company models.Company, salary int) error {
+	newBalance := *company.Balance - salary
+	if err := c.DB.Model(&company).Update("balance", newBalance).Error; err != nil {
+		return err
+	}
+
+	transaction := models.Transaction{
+		Amount: &salary,
+		Note:   "pencairan gaji bulanan karyawan",
+		Type:   "kredit",
+	}
+
+	if err := c.DB.Create(&transaction).Error; err != nil {
+		return err
+	}
+
+	return nil
+}
+
+// if *company.Balance == 0 {
+// 	return nil, errors.New("Balance: 0")
+// }
+// if err := c.DB.Model(company).Updates(company).Find(company).Error; err != nil {
+// 	return nil, err
+// }
+
+// updatedBalance := amount + *company.Balance
+
+//TODO: koreksi flow ini gabisa bisa
+//y := *company.Balance

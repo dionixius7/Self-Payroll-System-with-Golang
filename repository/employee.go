@@ -1,7 +1,7 @@
 package repository
 
 import (
-	"errors"
+	//"errors"
 	"finalproject_basisdata/models"
 
 	//"finalproject_basisdata/repository/position"
@@ -63,29 +63,29 @@ func (c *EmployeeRepository) DeleteEmployee(id string) error {
 
 }
 
-func (c *EmployeeRepository) WithdrawSalaryEmployee(id string, req *models.WithdrawRequest) error {
-	employee, err := c.GetEmployeeById(id)
-	if err != nil {
-		return errors.New("Data karyawan tidak ditemukan")
-	}
+// func (c *EmployeeRepository) WithdrawSalaryEmployee(id string, req *models.WithdrawRequest) error {
+// 	employee, err := c.GetEmployeeById(id)
+// 	if err != nil {
+// 		return errors.New("Data karyawan tidak ditemukan")
+// 	}
 
-	if *employee.Private_Pin != req.Private_Pin {
-		return errors.New("Pin yang anda masukkan salah")
-	}
+// 	if *employee.Private_Pin != req.Private_Pin {
+// 		return errors.New("Pin yang anda masukkan salah")
+// 	}
 
-	position, err := c.Position.GetPositionById(id) // Corrected method name
-	if err != nil {
-		return errors.New("Data posisi tidak ditemukan")
-	}
+// 	position, err := c.Position.GetPositionById(id) // Corrected method name
+// 	if err != nil {
+// 		return errors.New("Data posisi tidak ditemukan")
+// 	}
 
-	salary := position.Salary
-	if salary == nil {
-		return errors.New("Gaji karyawan belum ditetapkan")
-	}
+// 	salary := position.Salary
+// 	if salary == nil {
+// 		return errors.New("Gaji karyawan belum ditetapkan")
+// 	}
 
-	if err := c.DB.Save(&position).Error; err != nil {
-		return errors.New("Gagal menarik gaji")
-	}
-
-	return nil
-}
+// 	if err := c.DB.Save(&position).Error; err != nil {
+// 		return errors.New("Gagal menarik gaji")
+// 	}
+	
+// 	return nil
+// }

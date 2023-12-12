@@ -9,11 +9,14 @@ import (
 )
 
 func SetupEmployeeRoutes(api fiber.Router) {
+	// Assuming you have a CompanyRepository instance
+	companyRepo := repository.NewCompanyRepository(repository.DB)
+
 	employeeRepo := repository.NewEmployeeRepository(repository.DB)
-	employeeUsecase := usecase.NewEmployeeUsecase(employeeRepo)
+	employeeUsecase := usecase.NewEmployeeUsecase(employeeRepo, companyRepo)
 	employeeController := controllers.NewEmployeeController(employeeUsecase)
 	
-	//http://localhost:8000/api/admin/company/employee/
+	// http://localhost:8000/api/admin/company/employee/
 	employee := api.Group("/admin/company/employee")
 	employee.Post("/", employeeController.CreateEmployeeData)
 	employee.Get("/", employeeController.GetAllEmployee)

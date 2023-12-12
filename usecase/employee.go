@@ -8,11 +8,15 @@ import (
 )
 
 type EmployeeUsecase struct {
-	Repo *repository.EmployeeRepository
+	Repo    *repository.EmployeeRepository
+	Company *repository.CompanyRepository
 }
 
-func NewEmployeeUsecase(repo *repository.EmployeeRepository) *EmployeeUsecase {
-	return &EmployeeUsecase{Repo: repo}
+func NewEmployeeUsecase(repo *repository.EmployeeRepository, companyRepo *repository.CompanyRepository) *EmployeeUsecase {
+	return &EmployeeUsecase{
+		Repo:    repo,
+		Company: companyRepo,
+	}
 }
 
 func (c *EmployeeUsecase) GetAllEmployee() ([]models.Employee, error) {
@@ -67,7 +71,40 @@ func (c *EmployeeUsecase) DeleteEmployee(id string) error {
 }
 
 func (c *EmployeeUsecase) WithdrawSalaryEmployee(id string, req *models.WithdrawRequest) error {
-	return c.Repo.WithdrawSalaryEmployee(id, req)
+	employee, err := c.Repo.GetEmployeeById(id)
+	if err != nil {
+		return errors.New("Data karyawan tidak ditemukan")
+	}
+
+	if *employee.Private_Pin != req.Private_Pin {
+		return errors.New("Pin yang anda masukkan salah")
+	}
+
+	position, err := c.Repo.Position.GetPositionById(id)
+	if err != nil {
+		return errors.New("Data posisi tidak ditemukan")
+	}
+
+	salary := position.Salary
+	if salary == nil {
+		return errors.New("Gaji karyawan belum ditetapkan")
+	}
+
+	if err := c.Repo.DB.Save(&position).Error; err != nil {
+		return errors.New("Gagal menarik gaji")
+	}
+	company, err := c.Company.GetCompanyInfo(id)
+	if err != nil {
+		return err
+	}
+
+	err = c.Company.UpdateCompanyBalanceAfterWithdraw(*company, *salary)
+	if err != nil {
+		return err
+	}
+
+	return nil
+
 }
 
 // func (c *EmployeeUsecase) WithdrawSalaryEmployee(id string, req *models.WithdrawRequest) error {

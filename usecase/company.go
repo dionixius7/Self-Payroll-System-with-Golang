@@ -63,7 +63,7 @@ func (c *CompanyUsecase) TopupBalanceCompany(id string, req models.TopupCompanyB
 		return nil, err
 	}
 
-	err2 := c.Repo.UpdateCompanyBalance(*company, req.Balance)
+	err2 := c.Repo.UpdateCompanyTopupBalance(*company, req.Balance)
 	if err2 != nil {
 		return nil, err2
 	}

@@ -33,3 +33,8 @@ type WithdrawRequest struct {
 	ID          int    `json:"id"`
 	Private_Pin string `json:"private_pin"`
 }
+
+// const (
+// 	WithdrawTransactionType = "kredit"
+// 	WithdrawTransactionNote = "pencairan gaji bulanan karyawan"
+// )
