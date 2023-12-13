@@ -131,3 +131,4 @@ func (c *EmployeeController) WithdrawSalaryEmployee(ctx *fiber.Ctx) error {
 		"data":    "Berhasil mencairkan gaji bulanan Anda",
 	})
 }
+//cek
