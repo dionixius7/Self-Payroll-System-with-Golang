@@ -14,12 +14,13 @@ func NewPositionRepository(db *gorm.DB) *PositionRepository {
 	return &PositionRepository{DB: db}
 }
 func (c *PositionRepository) CreatePosition(position *models.Position) error {
-	if err := c.DB.Create(position).Error; err != nil {
+	if err := c.DB.Create(&position).Error; err != nil {
 		return err
 	}
 
 	return nil
 }
+
 
 func (c *PositionRepository) DeletePosition(id string) error {
 	result := c.DB.Where("id = ?", id).Delete(&models.Position{})

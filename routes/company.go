@@ -14,9 +14,9 @@ func SetupCompanyRoutes(api fiber.Router) {
 	companyController := controllers.NewCompanyController(companyUsecase)
 
 	//http://localhost:8000/api/admin/company/
-	company := api.Group("/admin/company")
-	company.Get("/:id", companyController.GetCompanyInfo)
+	company := api.Group("/company")
+	company.Get("/:company_id", companyController.GetCompanyInfo)
 	company.Post("/", companyController.CreateCompany)
-	company.Patch("/:id", companyController.UpdateCompany)
-	company.Patch("/topup/:id", companyController.TopupBalanceCompany)
+	company.Patch("/:company_id", companyController.UpdateCompany)
+	company.Patch("/topup/:company_id", companyController.TopupBalanceCompany)
 }

@@ -14,6 +14,6 @@ func SetupTransactionRoutes(api fiber.Router) {
 	transactionController := controllers.NewTransactionController(transactionUsecase)
 	
 	//http://localhost:8000/api/admin/company/transaction/
-	transaction := api.Group("/admin/company/transaction")
+	transaction := api.Group("/transactions")
 	transaction.Get("/", transactionController.GetInfoTransaction)
 }

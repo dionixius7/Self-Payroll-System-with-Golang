@@ -19,24 +19,29 @@ func NewPositionController(usecase *usecase.PositionUsecase) *PositionController
 func (c *PositionController) CreatePosition(ctx *fiber.Ctx) error {
 	var req models.PositionReq
 	if err := ctx.BodyParser(&req); err != nil {
-		log.Println("Err: ", err)
+		log.Println("Error parsing request body: ", err)
 		return ctx.Status(fiber.StatusBadRequest).JSON(fiber.Map{
 			"message": "Invalid req body",
 		})
 	}
+
+	log.Println("Received request body: ", req)
+
 	if req.NamePosition == nil || req.Salary == nil {
 		log.Println("Harap isi seluruh kolom")
 		return ctx.Status(fiber.StatusBadRequest).JSON(fiber.Map{
 			"message": "Harap isi seluruh kolom",
 		})
 	}
+
 	position, err := c.Usecase.CreatePosition(&req)
 	if err != nil {
-		log.Println("Err: ", err)
+		log.Println("Error creating position: ", err)
 		return ctx.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
 			"message": "Gagal menambahkan data posisi",
 		})
 	}
+
 	return ctx.JSON(fiber.Map{
 		"message": fiber.StatusOK,
 		"data":    position,

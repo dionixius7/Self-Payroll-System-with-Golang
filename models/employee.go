@@ -15,6 +15,7 @@ type Employee struct {
 	Address     *string    `json:"address"`
 	Private_Pin *string    `json:"private_pin"`
 	Position_ID *string    `json:"position_id"`
+	Is_Paid     *bool      `gorm:"default:false;column:is_paid" json:"is_paid"`
 	Position    *Position  `json:"position"`
 	CreatedAt   time.Time  `gorm:"default:now()" json:"created_at"`
 	UpdatedAt   *time.Time `json:"updated_at"`
@@ -30,11 +31,6 @@ type EmployeeRequest struct {
 }
 
 type WithdrawRequest struct {
-	ID          int    `json:"id"`
+	//ID          int    `json:"id"`
 	Private_Pin string `json:"private_pin"`
 }
-
-// const (
-// 	WithdrawTransactionType = "kredit"
-// 	WithdrawTransactionNote = "pencairan gaji bulanan karyawan"
-// )

@@ -17,8 +17,8 @@ func NewCompanyController(usecase *usecase.CompanyUsecase) *CompanyController {
 }
 
 func (c *CompanyController) GetCompanyInfo(ctx *fiber.Ctx) error {
-	id := ctx.Params("id")
-	company, err := c.Usecase.GetCompanyInfo(id)
+	company_id := ctx.Params("company_id")
+	company, err := c.Usecase.GetCompanyInfo(company_id)
 	if err != nil {
 		log.Println("Invalid ID:", err)
 		return ctx.Status(fiber.StatusBadRequest).JSON(fiber.Map{
@@ -32,7 +32,7 @@ func (c *CompanyController) GetCompanyInfo(ctx *fiber.Ctx) error {
 		})
 	}
 	return ctx.JSON(fiber.Map{
-		"id":      id,
+		"company_id":      company_id,
 		"company": company,
 	})
 }
@@ -73,8 +73,8 @@ func (c *CompanyController) UpdateCompany(ctx *fiber.Ctx) error {
 			"message": "Invalid request body",
 		})
 	}
-	id := ctx.Params("id")
-	company, err := c.Usecase.UpdateCompany(id, &req)
+	company_id := ctx.Params("company_id")
+	company, err := c.Usecase.UpdateCompany(company_id, &req)
 	if err != nil {
 		log.Println("ID perusahaan tidak dapat ditemukan: ", err)
 		return ctx.Status(fiber.StatusNotFound).JSON(fiber.Map{
@@ -100,8 +100,8 @@ func (c *CompanyController) TopupBalanceCompany(ctx *fiber.Ctx) error {
 			"message": "Saldo harus lebih besar dari nol",
 		})
 	}
-	id := ctx.Params("id")
-	balance, err := c.Usecase.TopupBalanceCompany(id, req)
+	company_id := ctx.Params("company_id")
+	balance, err := c.Usecase.TopupBalanceCompany(company_id, req)
 	if err != nil {
 		log.Println("ID perusahaan tidak dapat ditemukan: ", err)
 		return ctx.Status(fiber.StatusNotFound).JSON(fiber.Map{

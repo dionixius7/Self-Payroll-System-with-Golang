@@ -16,8 +16,8 @@ func NewCompanyUsecase(repo *repository.CompanyRepository) *CompanyUsecase {
 	return &CompanyUsecase{Repo: repo}
 }
 
-func (c *CompanyUsecase) GetCompanyInfo(id string) (*models.Company, error) {
-	company, err := c.Repo.GetCompanyInfo(id)
+func (c *CompanyUsecase) GetCompanyInfo(company_id string) (*models.Company, error) {
+	company, err := c.Repo.GetCompanyInfo(company_id)
 	if err != nil {
 		log.Println("Terdapat error dalam sistem:", err)
 		return nil, err
@@ -40,8 +40,8 @@ func (c *CompanyUsecase) CreateCompany(req *models.CompanyRequest) (*models.Comp
 	return company, nil
 }
 
-func (c *CompanyUsecase) UpdateCompany(id string, req *models.CompanyRequest) (*models.Company, error) {
-	company, err := c.Repo.GetCompanyInfo(id)
+func (c *CompanyUsecase) UpdateCompany(company_id string, req *models.CompanyRequest) (*models.Company, error) {
+	company, err := c.Repo.GetCompanyInfo(company_id)
 	if err != nil {
 		return nil, err
 	}
@@ -57,8 +57,8 @@ func (c *CompanyUsecase) UpdateCompany(id string, req *models.CompanyRequest) (*
 	return company, nil
 }
 
-func (c *CompanyUsecase) TopupBalanceCompany(id string, req models.TopupCompanyBalance) (*models.Company, error) {
-	company, err := c.Repo.GetCompanyInfo(id)
+func (c *CompanyUsecase) TopupBalanceCompany(company_id string, req models.TopupCompanyBalance) (*models.Company, error) {
+	company, err := c.Repo.GetCompanyInfo(company_id)
 	if err != nil {
 		return nil, err
 	}
@@ -67,7 +67,7 @@ func (c *CompanyUsecase) TopupBalanceCompany(id string, req models.TopupCompanyB
 	if err2 != nil {
 		return nil, err2
 	}
-	companynew, err := c.Repo.GetCompanyInfo(id)
+	companynew, err := c.Repo.GetCompanyInfo(company_id)
 	if err != nil {
 		return nil, err
 	}

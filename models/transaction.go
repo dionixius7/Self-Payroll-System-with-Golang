@@ -2,11 +2,6 @@ package models
 
 import "time"
 
-// const (
-// 	TopupTransactionType string = "debit"
-// 	TopupTransactionNote string = "topup saldo perusahaan"
-// )
-
 type Transaction struct {
 	ID        int        `gorm:"AUTO_INCREMENT;primaryKey" json:"id"`
 	Type      string     `gorm:"type:varchar(36)" json:"type"`

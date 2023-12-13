@@ -46,12 +46,11 @@ func (c *EmployeeRepository) CreateEmployeeData(employee *models.Employee) error
 	return nil
 }
 
-func (c *EmployeeRepository) UpdateEmployeeData(id string, req *models.EmployeeRequest) (*models.Employee, error) {
-	var employee models.Employee
-	if err := c.DB.Model(&employee).Where("id = ?", id).Updates(req).Error; err != nil {
+func (c *EmployeeRepository) UpdateEmployeeData(id string, employee *models.Employee) (*models.Employee, error) {
+	if err := c.DB.Model(&models.Employee{}).Where("id = ?", id).Updates(employee).Error; err != nil {
 		return nil, err
 	}
-	return &employee, nil
+	return employee, nil
 }
 
 func (c *EmployeeRepository) DeleteEmployee(id string) error {

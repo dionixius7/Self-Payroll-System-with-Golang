@@ -12,7 +12,7 @@ import (
 var DB *gorm.DB
 
 func ConnectDatabase() {
-	dsn := "root@tcp(127.0.0.1:3306)/finalproject_basisdata?charset=utf8mb4&parseTime=True&loc=Local"
+	dsn := "root@tcp(127.0.0.1:3306)/selfpayroll_basisdata?charset=utf8mb4&parseTime=True&loc=Local"
 	database, err := gorm.Open(mysql.Open(dsn), &gorm.Config{NamingStrategy: schema.NamingStrategy{SingularTable: true}})
 	if err != nil {
 		panic(err)
@@ -35,15 +35,3 @@ func ConnectDatabase() {
 	db.SetMaxOpenConns(100)
 	db.SetConnMaxLifetime(time.Hour)
 }
-
-// func DisconnectDatabase() string {
-// 	if DB != nil {
-// 		sqlDB, err := DB.DB()
-// 		if err != nil {
-// 			panic(err)
-// 		}
-// 		sqlDB.Close()
-// 		return "Sukses memutuskan koneksi dari database."
-// 	}
-// 	return "Tidak ada koneksi yang perlu diputus."
-// }
