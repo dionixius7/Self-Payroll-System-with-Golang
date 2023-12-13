@@ -31,10 +31,11 @@ func (c *CompanyController) GetCompanyInfo(ctx *fiber.Ctx) error {
 			"message": "Terjadi Kesalahan Dalam Sistem",
 		})
 	}
-	return ctx.JSON(fiber.Map{
-		"company_id":      company_id,
-		"company": company,
-	})
+	return ctx.JSON(company)
+	// return ctx.JSON(fiber.Map{
+	// 	"company_id": company_id,
+	// 	"company":    company,
+	// })
 }
 
 func (c *CompanyController) CreateCompany(ctx *fiber.Ctx) error {
@@ -59,10 +60,12 @@ func (c *CompanyController) CreateCompany(ctx *fiber.Ctx) error {
 			"message": "Gagal membuat data perusahaan",
 		})
 	}
-	return ctx.JSON(fiber.Map{
-		"message": fiber.StatusOK,
-		"data":    company,
-	})
+	return ctx.JSON(company)
+
+	// return ctx.JSON(fiber.Map{
+	// 	"message": fiber.StatusOK,
+	// 	"data":    company,
+	// })
 }
 
 func (c *CompanyController) UpdateCompany(ctx *fiber.Ctx) error {
@@ -81,10 +84,12 @@ func (c *CompanyController) UpdateCompany(ctx *fiber.Ctx) error {
 			"message": "Perusahaan Tidak Ditemukan",
 		})
 	}
-	return ctx.JSON(fiber.Map{
-		"message": "Berhasil mengubah data perusahaan",
-		"data":    company,
-	})
+	return ctx.JSON(company)
+
+	// return ctx.JSON(fiber.Map{
+	// 	"message": "Berhasil mengubah data perusahaan",
+	// 	"data":    company,
+	// })
 }
 
 func (c *CompanyController) TopupBalanceCompany(ctx *fiber.Ctx) error {
@@ -108,8 +113,9 @@ func (c *CompanyController) TopupBalanceCompany(ctx *fiber.Ctx) error {
 			"message": "Perusahaan Tidak Ditemukan",
 		})
 	}
-	return ctx.JSON(fiber.Map{
-		"message": "Berhasil menambahkan saldo perusahaan",
-		"data":    balance,
-	})
+	return ctx.JSON(balance)
+	// return ctx.JSON(fiber.Map{
+	// 	"message": "Berhasil menambahkan saldo perusahaan",
+	// 	"data":    balance,
+	// })
 }

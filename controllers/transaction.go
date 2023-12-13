@@ -21,9 +21,10 @@ func (c *TransactionController) GetInfoTransaction(ctx *fiber.Ctx) error {
 			"message": "Gagal mendapatkan data transaksi",
 		})
 	}
+	return ctx.JSON(transactions)
 
-	return ctx.JSON(fiber.Map{
-		"message": fiber.StatusOK,
-		"data":    transactions,
-	})
+	// return ctx.JSON(fiber.Map{
+	// 	"message": fiber.StatusOK,
+	// 	"data":    transactions,
+	// })
 }

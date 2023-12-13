@@ -47,8 +47,9 @@ func (c *AdminController) LoginAdmin(ctx *fiber.Ctx) error {
 			"message": err.Error(),
 		})
 	}
-	return ctx.Status(fiber.StatusOK).JSON(fiber.Map{
-		"message": fiber.StatusOK,
-		"data":    "Admin berhasil login",
-	})
+	return ctx.JSON("Admin berhasil login")
+	// return ctx.Status(fiber.StatusOK).JSON(fiber.Map{
+	// 	"message": fiber.StatusOK,
+	// 	"data":    "Admin berhasil login",
+	// })
 }

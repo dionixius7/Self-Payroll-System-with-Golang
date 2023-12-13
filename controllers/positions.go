@@ -41,11 +41,12 @@ func (c *PositionController) CreatePosition(ctx *fiber.Ctx) error {
 			"message": "Gagal menambahkan data posisi",
 		})
 	}
+	return ctx.JSON(position)
 
-	return ctx.JSON(fiber.Map{
-		"message": fiber.StatusOK,
-		"data":    position,
-	})
+	// return ctx.JSON(fiber.Map{
+	// 	"message": fiber.StatusOK,
+	// 	"data":    position,
+	// })
 }
 
 func (c *PositionController) DeletePosition(ctx *fiber.Ctx) error {
@@ -63,10 +64,10 @@ func (c *PositionController) DeletePosition(ctx *fiber.Ctx) error {
 			"message": "Gagal menghapus data posisi",
 		})
 	}
-
-	return ctx.JSON(fiber.Map{
-		"message": "Data posisi berhasil dihapus",
-	})
+	return ctx.JSON("Data posisi berhasil dihapus")
+	// return ctx.JSON(fiber.Map{
+	// 	"message": "Data posisi berhasil dihapus",
+	// })
 }
 
 func (c *PositionController) UpdatePosition(ctx *fiber.Ctx) error {
@@ -92,11 +93,12 @@ func (c *PositionController) UpdatePosition(ctx *fiber.Ctx) error {
 			"message": "Gagal memperbarui data posisi",
 		})
 	}
+	return ctx.JSON(position)
 
-	return ctx.JSON(fiber.Map{
-		"message": fiber.StatusOK,
-		"data":    position,
-	})
+	// return ctx.JSON(fiber.Map{
+	// 	"message": fiber.StatusOK,
+	// 	"data":    position,
+	// })
 }
 
 func (c *PositionController) GetPositionById(ctx *fiber.Ctx) error {
@@ -114,9 +116,10 @@ func (c *PositionController) GetPositionById(ctx *fiber.Ctx) error {
 			"message": "Gagal mendapatkan data posisi",
 		})
 	}
+	return ctx.JSON(position)
 
-	return ctx.JSON(fiber.Map{
-		"message": fiber.StatusOK,
-		"data":    position,
-	})
+	// return ctx.JSON(fiber.Map{
+	// 	"message": fiber.StatusOK,
+	// 	"data":    position,
+	// })
 }
