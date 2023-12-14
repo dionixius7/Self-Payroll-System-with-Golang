@@ -16,6 +16,14 @@ func NewCompanyUsecase(repo *repository.CompanyRepository) *CompanyUsecase {
 	return &CompanyUsecase{Repo: repo}
 }
 
+func (c *CompanyUsecase) GetAllCompany() ([]models.Company, error) {
+    companies, err := c.Repo.GetAllCompany()
+    if err != nil {
+        return nil, err
+    }
+    return companies, nil
+}
+
 func (c *CompanyUsecase) GetCompanyInfo(company_id string) (*models.Company, error) {
 	company, err := c.Repo.GetCompanyInfo(company_id)
 	if err != nil {

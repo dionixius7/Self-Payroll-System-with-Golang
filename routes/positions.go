@@ -15,8 +15,9 @@ func SetupPositionRoutes(api fiber.Router) {
 
 	//http://localhost:8000/api/admin/company/position/
 	position := api.Group("/positions")
-	position.Post("/", positionController.CreatePosition)
+	position.Get("/", positionController.GetAllPositionData)
 	position.Get("/:id", positionController.GetPositionById)
+	position.Post("/", positionController.CreatePosition)
 	position.Delete("/:id", positionController.DeletePosition)
 	position.Patch("/:id", positionController.UpdatePosition)
 }

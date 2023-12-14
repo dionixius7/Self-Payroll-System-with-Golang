@@ -13,6 +13,24 @@ type PositionRepository struct {
 func NewPositionRepository(db *gorm.DB) *PositionRepository {
 	return &PositionRepository{DB: db}
 }
+
+func (c *PositionRepository) GetAllPositionData() ([]*models.Position, error) {
+	var positions []*models.Position
+	if err := c.DB.Find(&positions).Error; err != nil {
+		return nil, err
+	}
+	return positions, nil
+}
+
+func (c *PositionRepository) GetPositionById(id string) (*models.Position, error) {
+	var position models.Position
+	if err := c.DB.First(&position, id).Error; err != nil {
+		return nil, err
+	}
+
+	return &position, nil
+}
+
 func (c *PositionRepository) CreatePosition(position *models.Position) error {
 	if err := c.DB.Create(&position).Error; err != nil {
 		return err
@@ -20,7 +38,6 @@ func (c *PositionRepository) CreatePosition(position *models.Position) error {
 
 	return nil
 }
-
 
 func (c *PositionRepository) DeletePosition(id string) error {
 	result := c.DB.Where("id = ?", id).Delete(&models.Position{})
@@ -42,13 +59,4 @@ func (c *PositionRepository) UpdatePosition(id string, req *models.PositionReq) 
 	}
 
 	return position, nil
-}
-
-func (c *PositionRepository) GetPositionById(id string) (*models.Position, error) {
-	var position models.Position
-	if err := c.DB.First(&position, id).Error; err != nil {
-		return nil, err
-	}
-
-	return &position, nil
 }

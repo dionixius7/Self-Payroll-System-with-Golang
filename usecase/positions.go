@@ -15,6 +15,14 @@ func NewPositionUsecase(repo *repository.PositionRepository) *PositionUsecase {
 	return &PositionUsecase{Repo: repo}
 }
 
+func (c *PositionUsecase) GetPositionById(id string) (*models.Position, error) {
+	return c.Repo.GetPositionById(id)
+}
+
+func (c *PositionUsecase) GetAllPositionData() ([]*models.Position, error) {
+	return c.Repo.GetAllPositionData()
+}
+
 func (c *PositionUsecase) CreatePosition(req *models.PositionReq) (*models.Position, error) {
 	if req.NamePosition == nil || req.Salary == nil {
 		return nil, errors.New("Isi seluruh kolom")
@@ -39,6 +47,3 @@ func (c *PositionUsecase) UpdatePosition(id string, req *models.PositionReq) (*m
 	return c.Repo.UpdatePosition(id, req)
 }
 
-func (c *PositionUsecase) GetPositionById(id string) (*models.Position, error) {
-	return c.Repo.GetPositionById(id)
-}

@@ -17,6 +17,7 @@ type Employee struct {
 	Position_ID *string    `json:"position_id"`
 	Is_Paid     *bool      `gorm:"default:false;column:is_paid" json:"is_paid"`
 	Position    *Position  `json:"position"`
+	//PositionName string    `gorm:"-" json:"position_name"` 
 	CreatedAt   time.Time  `gorm:"default:now()" json:"created_at"`
 	UpdatedAt   *time.Time `json:"updated_at"`
 }

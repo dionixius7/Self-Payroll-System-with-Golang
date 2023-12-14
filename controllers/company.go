@@ -15,6 +15,16 @@ type CompanyController struct {
 func NewCompanyController(usecase *usecase.CompanyUsecase) *CompanyController {
 	return &CompanyController{Usecase: usecase}
 }
+func (c *CompanyController) GetAllCompany(ctx *fiber.Ctx) error {
+	companies, err := c.Usecase.GetAllCompany()
+	if err != nil {
+		log.Println("Error: ", err)
+		return ctx.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
+			"message": "Gagal mendapatkan seluruh data perusahaan yang tersimpan",
+		})
+	}
+	return ctx.JSON(companies)
+}
 
 func (c *CompanyController) GetCompanyInfo(ctx *fiber.Ctx) error {
 	company_id := ctx.Params("company_id")

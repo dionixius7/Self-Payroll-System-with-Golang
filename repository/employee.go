@@ -23,13 +23,37 @@ func NewEmployeeRepository(db *gorm.DB) *EmployeeRepository {
 
 //Position: position.NewPositionRepository(db),
 
+// func (c *EmployeeRepository) GetAllEmployee() ([]models.Employee, error) {
+// 	var employees []models.Employee
+// 	if err := c.DB.Find(&employees).Error; err != nil {
+// 		return nil, err
+// 	}
+// 	return employees, nil
+// }
 func (c *EmployeeRepository) GetAllEmployee() ([]models.Employee, error) {
-	var employees []models.Employee
-	if err := c.DB.Find(&employees).Error; err != nil {
-		return nil, err
-	}
-	return employees, nil
+    var employees []models.Employee
+    if err := c.DB.Preload("Position").Find(&employees).Error; err != nil {
+        return nil, err
+    }
+    return employees, nil
 }
+
+// func (c *EmployeeRepository) GetAllEmployee() ([]models.Employee, error) {
+// 	var employees []models.Employee
+// 	if err := c.DB.Find(&employees).Error; err != nil {
+// 		return nil, err
+// 	}
+// 	for i, emp := range employees {
+// 		var position models.Position
+// 		if err := c.DB.Where("id = ?", emp.Position_ID).First(&position).Error; err != nil {
+// 			return nil, err
+// 		}
+// 		employees[i].PositionName = *position.NamePosition
+// 	}
+
+// 	return employees, nil
+// }
+
 
 func (c *EmployeeRepository) GetEmployeeById(id string) (*models.Employee, error) {
 	var employee models.Employee

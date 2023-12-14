@@ -16,6 +16,40 @@ func NewPositionController(usecase *usecase.PositionUsecase) *PositionController
 	return &PositionController{Usecase: usecase}
 }
 
+func (c *PositionController) GetAllPositionData(ctx *fiber.Ctx) error {
+	positions, err := c.Usecase.GetAllPositionData()
+	if err != nil {
+		log.Println("Error: ", err)
+		return ctx.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
+			"message": "Gagal mendapatkan seluruh data posisi perusahaan",
+		})
+	}
+	return ctx.JSON(positions)
+}
+
+func (c *PositionController) GetPositionById(ctx *fiber.Ctx) error {
+	positionID := ctx.Params("id")
+	if positionID == "" {
+		return ctx.Status(fiber.StatusBadRequest).JSON(fiber.Map{
+			"message": "Invalid req body",
+		})
+	}
+
+	position, err := c.Usecase.GetPositionById(positionID)
+	if err != nil {
+		log.Println("Err: ", err)
+		return ctx.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
+			"message": "Gagal mendapatkan data posisi",
+		})
+	}
+	return ctx.JSON(position)
+
+	// return ctx.JSON(fiber.Map{
+	// 	"message": fiber.StatusOK,
+	// 	"data":    position,
+	// })
+}
+
 func (c *PositionController) CreatePosition(ctx *fiber.Ctx) error {
 	var req models.PositionReq
 	if err := ctx.BodyParser(&req); err != nil {
@@ -91,29 +125,6 @@ func (c *PositionController) UpdatePosition(ctx *fiber.Ctx) error {
 		log.Println("Err: ", err)
 		return ctx.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
 			"message": "Gagal memperbarui data posisi",
-		})
-	}
-	return ctx.JSON(position)
-
-	// return ctx.JSON(fiber.Map{
-	// 	"message": fiber.StatusOK,
-	// 	"data":    position,
-	// })
-}
-
-func (c *PositionController) GetPositionById(ctx *fiber.Ctx) error {
-	positionID := ctx.Params("id")
-	if positionID == "" {
-		return ctx.Status(fiber.StatusBadRequest).JSON(fiber.Map{
-			"message": "Invalid req body",
-		})
-	}
-
-	position, err := c.Usecase.GetPositionById(positionID)
-	if err != nil {
-		log.Println("Err: ", err)
-		return ctx.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
-			"message": "Gagal mendapatkan data posisi",
 		})
 	}
 	return ctx.JSON(position)

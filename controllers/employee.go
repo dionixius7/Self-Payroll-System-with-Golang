@@ -3,9 +3,7 @@ package controllers
 import (
 	"finalproject_basisdata/models"
 	"finalproject_basisdata/usecase"
-	"fmt"
 	"log"
-	"reflect"
 
 	"github.com/gofiber/fiber/v2"
 )
@@ -18,6 +16,23 @@ func NewEmployeeController(usecase *usecase.EmployeeUsecase) *EmployeeController
 	return &EmployeeController{Usecase: usecase}
 }
 
+// func (c *EmployeeController) GetAllEmployee(ctx *fiber.Ctx) error {
+// 	employees, err := c.Usecase.GetAllEmployee()
+
+// 	if err != nil {
+// 		return ctx.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
+// 			"message": "Terdapat kesalahan dalam database",
+// 		})
+// 	}
+// 	fmt.Println("Tipe data dari employees:", reflect.TypeOf(employees))
+
+// 	// return ctx.JSON(fiber.Map{
+// 	// 	"status": fiber.StatusOK,
+// 	// 	"data":   employees,
+// 	// })
+// 	return ctx.JSON(employees)
+
+// }
 func (c *EmployeeController) GetAllEmployee(ctx *fiber.Ctx) error {
 	employees, err := c.Usecase.GetAllEmployee()
 
@@ -26,14 +41,7 @@ func (c *EmployeeController) GetAllEmployee(ctx *fiber.Ctx) error {
 			"message": "Terdapat kesalahan dalam database",
 		})
 	}
-	fmt.Println("Tipe data dari employees:", reflect.TypeOf(employees))
-
-	// return ctx.JSON(fiber.Map{
-	// 	"status": fiber.StatusOK,
-	// 	"data":   employees,
-	// })
 	return ctx.JSON(employees)
-
 }
 
 func (c *EmployeeController) GetEmployeeById(ctx *fiber.Ctx) error {
