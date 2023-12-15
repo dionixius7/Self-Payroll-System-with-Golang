@@ -14,12 +14,10 @@ func SetupAdminRoutes(api fiber.Router) {
 	adminController := controllers.NewAdminController(adminUsecase)
 
 	//Signup
-	//http://localhost:8000/api/admin/signup/
 	admin := api.Group("/admin/signup")
 	admin.Post("/", adminController.SingUpAdmin)
 
 	//login
-	//http://localhost:8000/api/admin/login/
 	admin2 := api.Group("/admin/login")
 	admin2.Post("/", adminController.LoginAdmin)
 
